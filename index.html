@@ -1,0 +1,319 @@
+package com.example.ui.screens
+
+import android.content.Context
+import android.content.Intent
+import android.net.Uri
+import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.material.icons.filled.DeleteForever
+import androidx.compose.material.icons.filled.Email
+import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.Lock
+import androidx.compose.material.icons.filled.OpenInBrowser
+import androidx.compose.material.icons.filled.Policy
+import androidx.compose.material.icons.filled.Security
+import androidx.compose.material.icons.filled.VerifiedUser
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.example.ui.theme.GoldPrimary
+import com.example.ui.theme.NavyBorder
+import com.example.ui.theme.NavyCard
+import com.example.ui.theme.NavyDarkest
+import com.example.ui.theme.NavySurface
+import com.example.ui.theme.NeonCyan
+
+@Composable
+fun PrivacyPolicyScreen(
+    onBack: () -> Unit,
+    onResetData: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    val context = LocalContext.current
+    var showResetDialog by remember { mutableStateOf(false) }
+
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+            .background(NavyDarkest)
+    ) {
+        // Top App Bar
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(NavySurface)
+                .padding(horizontal = 8.dp, vertical = 10.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            IconButton(onClick = onBack) {
+                Icon(Icons.Default.ArrowBack, contentDescription = "Back", tint = Color.White)
+            }
+            Spacer(modifier = Modifier.width(6.dp))
+            Column {
+                Text(
+                    text = "Privacy Policy",
+                    color = Color.White,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 17.sp
+                )
+                Text(
+                    text = "Smart Ludo – Online Multiplayer",
+                    color = GoldPrimary,
+                    fontSize = 11.sp
+                )
+            }
+        }
+
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(horizontal = 16.dp),
+            contentPadding = PaddingValues(top = 16.dp, bottom = 40.dp),
+            verticalArrangement = Arrangement.spacedBy(14.dp)
+        ) {
+            // Header Card
+            item {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clip(RoundedCornerShape(16.dp))
+                        .background(NavySurface)
+                        .border(1.dp, GoldPrimary.copy(alpha = 0.5f), RoundedCornerShape(16.dp))
+                        .padding(16.dp)
+                ) {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Box(
+                            modifier = Modifier
+                                .size(48.dp)
+                                .clip(CircleShape)
+                                .background(GoldPrimary),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Icon(Icons.Default.Security, contentDescription = null, tint = NavyDarkest, modifier = Modifier.size(28.dp))
+                        }
+                        Spacer(modifier = Modifier.width(12.dp))
+                        Column {
+                            Text(
+                                text = "Your Privacy is Protected",
+                                color = Color.White,
+                                fontWeight = FontWeight.Bold,
+                                fontSize = 15.sp
+                            )
+                            Spacer(modifier = Modifier.height(2.dp))
+                            Text(
+                                text = "Last updated: November 2026 • Effective immediately",
+                                color = Color(0xFF94A3B8),
+                                fontSize = 11.sp
+                            )
+                        }
+                    }
+                }
+            }
+
+            // Key Highlight: Zero Login / No Personal Data Required
+            item {
+                PolicySectionCard(
+                    title = "1. No Login, Registration, or OTP Required",
+                    icon = Icons.Default.Lock,
+                    iconTint = NeonCyan,
+                    content = "Smart Ludo operates entirely on a guest-first architecture. We do NOT ask for, require, or collect your email address, phone number, real name, passwords, or OTP verifications. A unique Player ID is generated automatically on your device for multiplayer identification and stored locally in your app's private storage."
+                )
+            }
+
+            // Section 2: Data Collected & Used
+            item {
+                PolicySectionCard(
+                    title = "2. Information We Handle",
+                    icon = Icons.Default.Info,
+                    iconTint = GoldPrimary,
+                    content = "• In-Game Guest ID: A random alphanumeric identifier (e.g., PL-20417) used to facilitate game invitations and match play.\n" +
+                              "• Custom Nickname & Avatar: Chosen by you within the app. You can change this at any time.\n" +
+                              "• Game Statistics: Wins, losses, total matches, coins, trophies, and match history stored on your device.\n" +
+                              "• Network Telemetry: Temporary room codes and connection ping (latency in milliseconds) strictly for smooth real-time board synchronization."
+                )
+            }
+
+            // Section 3: Third-Party Services
+            item {
+                PolicySectionCard(
+                    title = "3. Third-Party Services & Google Play",
+                    icon = Icons.Default.VerifiedUser,
+                    iconTint = Color(0xFF10B981),
+                    content = "This application complies fully with Google Play Developer Program policies and the Play Families Policy. Standard Google Play Services may collect diagnostic or crash log data under Google's Privacy Policy. We do not sell, rent, or monetize your personal information to third-party data brokers."
+                )
+            }
+
+            // Section 4: Children's Privacy
+            item {
+                PolicySectionCard(
+                    title = "4. Children's Privacy (COPPA Compliance)",
+                    icon = Icons.Default.CheckCircle,
+                    iconTint = Color(0xFF38BDF8),
+                    content = "Smart Ludo is designed for all audiences and family entertainment. Because we do not require account registration or collect personally identifiable information (PII), we do not knowingly solicit or collect personal data from children under 13."
+                )
+            }
+
+            // Section 5: Data Retention & User Deletion Rights
+            item {
+                PolicySectionCard(
+                    title = "5. Data Retention & Deletion Rights",
+                    icon = Icons.Default.Policy,
+                    iconTint = Color(0xFFF59E0B),
+                    content = "You have full control over your data. All your game statistics, friends list, and profile information are stored in your device's private application storage. You can delete or reset this data at any time by tapping 'Reset All Game Data' below or by clearing app data in Android System Settings."
+                )
+            }
+
+            // Action Button: Reset / Delete Data
+            item {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clip(RoundedCornerShape(14.dp))
+                        .background(NavyCard)
+                        .border(1.dp, NavyBorder, RoundedCornerShape(14.dp))
+                        .padding(14.dp)
+                ) {
+                    Column {
+                        Text(
+                            text = "Manage Your Stored Data",
+                            color = Color.White,
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 14.sp
+                        )
+                        Spacer(modifier = Modifier.height(4.dp))
+                        Text(
+                            text = "Resetting clears your Player ID, match records, career stats, and friend list from this device.",
+                            color = Color(0xFF94A3B8),
+                            fontSize = 12.sp
+                        )
+                        Spacer(modifier = Modifier.height(10.dp))
+                        Button(
+                            onClick = { showResetDialog = true },
+                            colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFEF4444)),
+                            shape = RoundedCornerShape(10.dp)
+                        ) {
+                            Icon(Icons.Default.DeleteForever, contentDescription = null, tint = Color.White, modifier = Modifier.size(18.dp))
+                            Spacer(modifier = Modifier.width(6.dp))
+                            Text("Reset All Game Data", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 13.sp)
+                        }
+                    }
+                }
+            }
+
+            // Section 6: Contact & Support
+            item {
+                PolicySectionCard(
+                    title = "6. Contact Us",
+                    icon = Icons.Default.Email,
+                    iconTint = Color(0xFFA855F7),
+                    content = "If you have any questions or concerns regarding this Privacy Policy or data protection, please contact the developer at:\n\nEmail: smtelecom.in@gmail.com\nApplication: Smart Ludo – Online Multiplayer"
+                )
+            }
+        }
+    }
+
+    if (showResetDialog) {
+        AlertDialog(
+            onDismissRequest = { showResetDialog = false },
+            title = { Text("Reset Game Data?", color = Color.White, fontWeight = FontWeight.Bold) },
+            text = {
+                Text(
+                    "This will reset your Player ID, stats, and match history. A new clean Player ID will be generated upon restart.",
+                    color = Color(0xFFCBD5E1)
+                )
+            },
+            confirmButton = {
+                Button(
+                    onClick = {
+                        showResetDialog = false
+                        onResetData()
+                    },
+                    colors = ButtonDefaults.buttonColors(containerColor = Color(0xFFEF4444))
+                ) {
+                    Text("Confirm Reset", color = Color.White, fontWeight = FontWeight.Bold)
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { showResetDialog = false }) {
+                    Text("Cancel", color = Color.White)
+                }
+            },
+            containerColor = NavySurface,
+            shape = RoundedCornerShape(16.dp)
+        )
+    }
+}
+
+@Composable
+private fun PolicySectionCard(
+    title: String,
+    icon: ImageVector,
+    iconTint: Color,
+    content: String
+) {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clip(RoundedCornerShape(14.dp))
+            .background(NavyCard)
+            .border(1.dp, NavyBorder, RoundedCornerShape(14.dp))
+            .padding(14.dp)
+    ) {
+        Column {
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                Icon(icon, contentDescription = null, tint = iconTint, modifier = Modifier.size(20.dp))
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(
+                    text = title,
+                    color = Color.White,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 14.sp
+                )
+            }
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(
+                text = content,
+                color = Color(0xFFCBD5E1),
+                fontSize = 12.sp,
+                lineHeight = 18.sp
+            )
+        }
+    }
+}
